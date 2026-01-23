@@ -27,7 +27,7 @@ export class IssuesController {
         }
     }
 
-    async getIssues(page = 1, pageSize = 50): Promise<IssuesList> {
+    async getIssues(page = 1, pageSize = 50, filterId?: number): Promise<IssuesList> {
         /*
         axios.interceptors.request.use(request => {
             console.log('Starting Request:', JSON.stringify(request, null, 2));
@@ -43,11 +43,39 @@ export class IssuesController {
         });
         */
         try {
+            const params: any = { page, page_size: pageSize };
+            if (filterId !== undefined) {
+                params.filter_id = filterId;
+            }
+            
             const response: AxiosResponse = await axios.get(
                 `${this.baseURL}/api/rest/issues`,
                 {
                     headers: this.headers,
-                    params: { page, page_size: pageSize }
+                    params
+                }
+            );
+            return IssuesListSchema.parse(response.data);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                throw new Error(`Failed to get issues: ${error.response?.data?.message || error.message}`);
+            }
+            throw error;
+        }
+    }
+
+    async getProjectIssues(project_id: number, page = 1, pageSize = 50, filterId?: number): Promise<IssuesList> {
+        try {
+            const params: any = { project_id, page, page_size: pageSize };
+            if (filterId !== undefined) {
+                params.filter_id = filterId;
+            }
+            
+            const response: AxiosResponse = await axios.get(
+                `${this.baseURL}/api/rest/issues`,
+                {
+                    headers: this.headers,
+                    params
                 }
             );
             return IssuesListSchema.parse(response.data);

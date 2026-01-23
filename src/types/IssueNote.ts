@@ -17,7 +17,9 @@ export const IssueNoteSchema = z.object({
   }),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
-  time_tracking: z.number().optional(),
+  time_tracking: z.object({
+    duration: z.string(),
+  }).optional(),
 });
 
 export const IssueNotesListSchema = z.object({
@@ -29,7 +31,9 @@ export const CreateIssueNoteSchema = z.object({
   view_state: z.object({
     id: z.number(),
   }).optional(),
-  time_tracking: z.number().optional(),
+  time_tracking: z.object({
+    duration: z.string(),
+  }).optional(),
 });
 
 export type IssueNote = z.infer<typeof IssueNoteSchema>;

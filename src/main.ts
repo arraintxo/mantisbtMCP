@@ -1,7 +1,9 @@
 import { FastMCP } from 'fastmcp';
 import { getIssueTool } from './tools/getIssueTool';
 import { getIssuesTool } from './tools/getIssuesTool';
+import { getProjectIssuesTool } from './tools/getProjectIssuesTool';
 import { createIssueTool } from './tools/createIssueTool';
+import { updateIssueTool } from './tools/updateIssueTool';
 import { getProjectTool } from './tools/getProjectTool';
 import { getProjectsTool } from './tools/getProjectsTool';
 import { getUserTool } from './tools/getUserTool';
@@ -18,7 +20,9 @@ const server = new FastMCP({
 // Add all tools to the server
 server.addTool(getIssueTool);
 server.addTool(getIssuesTool);
+server.addTool(getProjectIssuesTool);
 server.addTool(createIssueTool);
+server.addTool(updateIssueTool);
 server.addTool(getProjectTool);
 server.addTool(getProjectsTool);
 //server.addTool(getUserTool);

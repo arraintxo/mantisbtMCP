@@ -68,6 +68,9 @@ export const CreateIssueSchema = z.object({
   severity: z.object({
     id: z.number(),
   }).optional(),
+  status: z.object({
+    id: z.number(),
+  }).optional(),
 });
 
 export type Issue = z.infer<typeof IssueSchema>;

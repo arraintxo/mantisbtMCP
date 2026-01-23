@@ -9,21 +9,21 @@ export const createIssueNoteTool: Tool<any> = {
     issueId: z.number().describe('The ID of the issue to add note to'),
     text: z.string().describe('The note text'),
     viewStateId: z.number().optional().describe('View state ID for the note'),
-    timeTracking: z.number().optional().describe('Time tracking value in hours'),
+    timeTracking: z.string().optional().describe('Time tracking value in hours (HH:MM)'),
   }),
   execute: async (args, context) => {
     const { issueId, text, viewStateId, timeTracking } = args as {
       issueId: number;
       text: string;
       viewStateId?: number;
-      timeTracking?: number;
+      timeTracking?: string;
     };
     
     const controller = new IssueNotesController();
     const noteData = {
       text,
       ...(viewStateId && { view_state: { id: viewStateId } }),
-      ...(timeTracking && { time_tracking: timeTracking }),
+      ...(timeTracking && { time_tracking: { duration: timeTracking } }),
     };
     
     const newNote = await controller.createIssueNote(issueId, noteData);
