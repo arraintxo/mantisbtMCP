@@ -9,6 +9,7 @@ import { getProjectsTool } from './tools/getProjectsTool';
 import { getUserTool } from './tools/getUserTool';
 import { getCurrentUserTool } from './tools/getCurrentUserTool';
 import { createIssueNoteTool } from './tools/createIssueNoteTool';
+import { config } from './config/env';
 import axios from 'axios';
 
 
@@ -42,15 +43,27 @@ axios.interceptors.response.use(response => {
 // Start the server
 async function main() {
   try {
-    await server.start({
-  transportType: "httpStream",
-
-  httpStream: {
-    port: 8088,
-    host: "0.0.0.0"
-  },
-});
-    console.log('MantisBT MCP Server started successfully');
+    const transportMode = config.TRANSPORT_MODE;
+    
+    if (transportMode === 'stdio') {
+      // Start in stdio mode (for Claude Desktop and other MCP clients)
+      await server.start({
+        transportType: 'stdio',
+      });
+      console.error('MantisBT MCP Server started successfully in stdio mode');
+    } else if (transportMode === 'httpStream') {
+      // Start in HTTP stream mode (for SSE connections)
+      await server.start({
+        transportType: 'httpStream',
+        httpStream: {
+          port: config.HTTP_PORT,
+          host: config.HTTP_HOST,
+        },
+      });
+      console.error(`MantisBT MCP Server started successfully in httpStream mode on ${config.HTTP_HOST}:${config.HTTP_PORT}`);
+    } else {
+      throw new Error(`Invalid TRANSPORT_MODE: ${transportMode}. Must be 'stdio' or 'httpStream'`);
+    }
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);

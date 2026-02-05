@@ -34,6 +34,13 @@ This MCP server provides tools to interact with MantisBT through the following c
    ```env
    API_URL=https://your-mantisbt-instance.com
    API_TOKEN=your-api-token-here
+   
+   # Transport mode: 'stdio' (default) or 'httpStream'
+   TRANSPORT_MODE=stdio
+   
+   # HTTP Stream settings (only needed when TRANSPORT_MODE=httpStream)
+   HTTP_PORT=8088
+   HTTP_HOST=0.0.0.0
    ```
 
 3. **Build the Project**
@@ -42,9 +49,96 @@ This MCP server provides tools to interact with MantisBT through the following c
    ```
 
 4. **Run the Server**
+   
+   **stdio mode (for Claude Desktop or other MCP clients):**
    ```bash
    npm run dev
    ```
+   Or explicitly set the environment variable:
+   ```bash
+   TRANSPORT_MODE=stdio npm run dev
+   ```
+
+   **httpStream mode (for SSE connections):**
+   ```bash
+   TRANSPORT_MODE=httpStream npm run dev
+   ```
+
+## Transport Modes
+
+The server supports two transport modes:
+
+### stdio Mode (Default)
+- Uses standard input/output for communication
+- Ideal for Claude Desktop and other MCP client integrations
+- No network port required
+- Configuration: `TRANSPORT_MODE=stdio`
+
+### httpStream Mode
+- Uses Server-Sent Events (SSE) over HTTP
+- Allows remote connections
+- Requires port and host configuration
+- Configuration: `TRANSPORT_MODE=httpStream HTTP_PORT=8088 HTTP_HOST=0.0.0.0`
+
+## MCP Client Configuration
+
+To use this server with Claude Desktop or other MCP clients, add to your `mcp.json` or `claude_desktop_config.json`:
+
+**Using npx tsx (recommended - runs TypeScript directly):**
+```json
+{
+  "mcpServers": {
+    "mantisbt": {
+      "command": "npx",
+      "args": ["-y", "tsx", "src/main.ts"],
+      "cwd": "/absolute/path/to/mantisbtMCP",
+      "env": {
+        "API_URL": "https://your-mantisbt-instance.com",
+        "API_TOKEN": "your-api-token-here",
+        "TRANSPORT_MODE": "stdio"
+      }
+    }
+  }
+}
+```
+
+**Using npx ts-node:**
+```json
+{
+  "mcpServers": {
+    "mantisbt": {
+      "command": "npx",
+      "args": ["ts-node", "src/main.ts"],
+      "cwd": "/absolute/path/to/mantisbtMCP",
+      "env": {
+        "API_URL": "https://your-mantisbt-instance.com",
+        "API_TOKEN": "your-api-token-here",
+        "TRANSPORT_MODE": "stdio"
+      }
+    }
+  }
+}
+```
+
+**Using compiled JavaScript:**
+```json
+{
+  "mcpServers": {
+    "mantisbt": {
+      "command": "node",
+      "args": ["dist/main.js"],
+      "cwd": "/absolute/path/to/mantisbtMCP",
+      "env": {
+        "API_URL": "https://your-mantisbt-instance.com",
+        "API_TOKEN": "your-api-token-here",
+        "TRANSPORT_MODE": "stdio"
+      }
+    }
+  }
+}
+```
+
+**Note:** If using compiled JavaScript, run `npm run build` first.
 
 ## Project Structure
 

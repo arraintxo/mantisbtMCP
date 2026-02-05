@@ -117,7 +117,8 @@ export class IssuesController {
                 { headers: this.headers }
             );
 
-            const updatedIssue = response.data.issue || response.data;
+            // Extract issue from the response (API returns { "issues": [issue] })
+            const updatedIssue = response.data.issues?.[0] || response.data.issue || response.data;
             return IssueSchema.parse(updatedIssue);
         } catch (error) {
             if (axios.isAxiosError(error)) {

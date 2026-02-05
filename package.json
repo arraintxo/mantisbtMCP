@@ -1,6 +1,6 @@
 {
   "name": "mantisbt-mcp-server",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "main": "src/main.ts",
   "scripts": {
     "dev": "ts-node src/main.ts",
@@ -15,12 +15,14 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@types/jest": "^29.0.0",
     "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",
     "jest": "^29.0.0",
     "openapi-typescript": "^7.9.1",
+    "ts-jest": "^29.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.9.2"
   }
