@@ -1,6 +1,6 @@
 {
   "name": "mantisbt-mcp-server",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "main": "src/main.ts",
   "scripts": {
     "dev": "ts-node src/main.ts",
