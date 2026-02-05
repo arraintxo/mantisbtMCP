@@ -14,9 +14,10 @@ export const updateIssueTool: Tool<any> = {
     priorityId: z.number().optional().describe('Priority ID'),
     severityId: z.number().optional().describe('Severity ID'),
     statusId: z.number().optional().describe('Status ID (10=new, 20=feedback, 30=acknowledged, 40=confirmed, 50=assigned, 80=resolved, 90=closed)'),
+    handlerId: z.number().optional().describe('Handler/Assignee user ID'),
   }),
   execute: async (args, context) => {
-    const { issueId, summary, description, projectId, categoryId, priorityId, severityId, statusId } = args as {
+    const { issueId, summary, description, projectId, categoryId, priorityId, severityId, statusId, handlerId } = args as {
       issueId: number;
       summary?: string;
       description?: string;
@@ -25,6 +26,7 @@ export const updateIssueTool: Tool<any> = {
       priorityId?: number;
       severityId?: number;
       statusId?: number;
+      handlerId?: number;
     };
     
     const controller = new IssuesController();
@@ -37,6 +39,7 @@ export const updateIssueTool: Tool<any> = {
     if (priorityId) issueData.priority = { id: priorityId };
     if (severityId) issueData.severity = { id: severityId };
     if (statusId) issueData.status = { id: statusId };
+    if (handlerId) issueData.handler = { id: handlerId };
     
     const updatedIssue = await controller.updateIssue(issueId, issueData);
     return JSON.stringify(updatedIssue, null, 2);

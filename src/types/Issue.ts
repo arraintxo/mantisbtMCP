@@ -24,6 +24,12 @@ export const IssueSchema = z.object({
     real_name: z.string().optional(),
     email: z.string().optional(),
   }),
+  handler: z.object({
+    id: z.number(),
+    name: z.string(),
+    real_name: z.string().optional(),
+    email: z.string().optional(),
+  }).optional(),
   status: z.object({
     id: z.number(),
     name: z.string(),
@@ -69,6 +75,9 @@ export const CreateIssueSchema = z.object({
     id: z.number(),
   }).optional(),
   status: z.object({
+    id: z.number(),
+  }).optional(),
+  handler: z.object({
     id: z.number(),
   }).optional(),
 });
